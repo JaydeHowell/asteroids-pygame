@@ -7,7 +7,9 @@ from constants import (
         PLAYER_TURN_SPEED,
         PLAYER_SPEED,
         PLAYER_SHOOT_SPEED,
-        PLAYER_SHOOT_COOLDOWN_SECONDS
+        PLAYER_SHOOT_COOLDOWN_SECONDS,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
         )
 
 class Player(CircleShape):
@@ -52,7 +54,13 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
+        if keys[pygame.K_c]:
+            self.drop_bomb()
+
         self.shot_cooldown = max(0, self.shot_cooldown - dt)
+
+        self.position.x %= SCREEN_WIDTH
+        self.position.y %= SCREEN_HEIGHT
 
 
     def move(self, dt: float) -> None:
@@ -69,3 +77,6 @@ class Player(CircleShape):
             rotated_vector = velocity_vector.rotate(self.rotation)
             bullet.velocity = rotated_vector * PLAYER_SHOOT_SPEED
             self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
+
+    def drop_bomb(self) -> None:
+        bomb = Bomb(self.position.x, self.position.y)
