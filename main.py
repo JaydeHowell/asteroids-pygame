@@ -7,6 +7,8 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from bomb import Bomb
+from blast import Blast
 
 
 def main():
@@ -17,6 +19,10 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    bg_unscaled = pygame.image.load("images/background.png").convert()
+
+    background = pygame.transform.scale(bg_unscaled, (SCREEN_WIDTH, SCREEN_HEIGHT))
     
     clock = pygame.time.Clock()
     dt = 0.0
@@ -28,10 +34,17 @@ def main():
 
     shots = pygame.sprite.Group()
 
+    bombs = pygame.sprite.Group()
+    blasts = pygame.sprite.Group()
+
     Player.containers = (updatable, drawable)
     Asteroid.containers = (updatable, drawable, asteroids)
     AsteroidField.containers = (updatable)
     Shot.containers = (updatable, drawable, shots)
+    Bomb.containers = (updatable, drawable, bombs)
+    Blast.containers = (updatable, drawable, blasts)
+
+    screen.blit(background, (0, 0))
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     field = AsteroidField()
@@ -42,6 +55,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+
         
         updatable.update(dt)
 
@@ -55,8 +69,15 @@ def main():
                     log_event("asteroid_shot")
                     asteroid.split()
                     shot.kill()
+            for bomb in bombs:
+                if asteroid.collides_with(bomb):
+                    bomb.explode()
+            for blast in blasts:
+                if asteroid.collides_with(blast):
+                    log_event("explosion_hit_asteroid")
+                    asteroid.split()
 
-        screen.fill("black")
+
         for char in drawable:
             char.draw(screen)
 
