@@ -1,6 +1,7 @@
 import pygame
 from circleshape import CircleShape
 from shot import Shot
+from bomb import Bomb
 from constants import (
         PLAYER_RADIUS,
         LINE_WIDTH,
@@ -8,6 +9,8 @@ from constants import (
         PLAYER_SPEED,
         PLAYER_SHOOT_SPEED,
         PLAYER_SHOOT_COOLDOWN_SECONDS,
+        BOMB_DROP_COOLDOWN,
+        BOMB_DRIFT_SPEED,
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
         )
@@ -17,6 +20,7 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
+        self.bomb_cooldown = 0
 
 
     def triangle(self) -> list[pygame.Vector2]:
@@ -59,6 +63,8 @@ class Player(CircleShape):
 
         self.shot_cooldown = max(0, self.shot_cooldown - dt)
 
+        self.bomb_cooldown = max(0, self.bomb_cooldown - dt)
+
         self.position.x %= SCREEN_WIDTH
         self.position.y %= SCREEN_HEIGHT
 
@@ -79,4 +85,9 @@ class Player(CircleShape):
             self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
 
     def drop_bomb(self) -> None:
-        bomb = Bomb(self.position.x, self.position.y)
+        if not self.bomb_cooldown > 0:
+            bomb = Bomb(self.position.x, self.position.y)
+            velocity_vector = pygame.Vector2(0,1)
+            rotated_vector = velocity_vector.rotate(self.rotation)
+            bomb.velocity = rotated_vector * BOMB_DRIFT_SPEED
+            self.bomb_cooldown = BOMB_DROP_COOLDOWN
