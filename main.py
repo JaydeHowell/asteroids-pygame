@@ -77,6 +77,7 @@ def main():
                     log_event("explosion_hit_asteroid")
                     asteroid.split()
 
+        screen.blit(background, (0, 0))
 
         for char in drawable:
             char.draw(screen)
