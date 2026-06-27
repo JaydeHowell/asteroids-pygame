@@ -19,6 +19,7 @@ def main():
     pygame.init()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Asteroids - Jayde")
 
     bg_unscaled = pygame.image.load("images/background.png").convert()
 
@@ -26,6 +27,9 @@ def main():
     
     clock = pygame.time.Clock()
     dt = 0.0
+
+    score_font = pygame.font.SysFont(None, 36)
+    score_value = 0
     
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -63,11 +67,12 @@ def main():
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
+                print(f"Final Score: {score_value}")
                 sys.exit(1)
             for shot in shots:
                 if asteroid.collides_with(shot):
                     log_event("asteroid_shot")
-                    asteroid.split()
+                    score_value += asteroid.split()
                     shot.kill()
             for bomb in bombs:
                 if asteroid.collides_with(bomb):
@@ -77,7 +82,10 @@ def main():
                     log_event("explosion_hit_asteroid")
                     asteroid.split()
 
+        score_text = score_font.render(f"Score: {score_value}", True, "White")
+
         screen.blit(background, (0, 0))
+        screen.blit(score_text, (20, 20))
 
         for char in drawable:
             char.draw(screen)
