@@ -2,9 +2,9 @@ import pygame
 
 import random
 import math
-from dataclasses import dataclass
 
 from circleshape import CircleShape
+from wave import Wave
 from constants import (
         LINE_WIDTH,
         ASTEROID_MIN_RADIUS,
@@ -15,11 +15,6 @@ from constants import (
         )
 from logger import log_event
 
-@dataclass
-class Wave:
-    frequency: int
-    amplitude: float
-    phase_shift: float
 
 class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, radius: float) -> None:
