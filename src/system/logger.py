@@ -1,6 +1,7 @@
 import inspect
 import json
 import math
+from pathlib import Path
 from datetime import datetime
 from typing import NotRequired, TypedDict
 
@@ -29,7 +30,7 @@ _event_log_initialized = False
 _start_time = datetime.now()
 
 
-def log_state() -> None:
+def log_state(log_dir: Path) -> None:
     global _frame_count, _state_log_initialized
 
     # Stop logging after `_MAX_SECONDS` seconds
@@ -126,13 +127,13 @@ def log_state() -> None:
 
     # New log file on each run
     mode = "w" if not _state_log_initialized else "a"
-    with open("game_state.jsonl", mode) as f:
+    with open(log_dir / "game_state.jsonl", mode) as f:
         f.write(json.dumps(entry) + "\n")
 
     _state_log_initialized = True
 
 
-def log_event(event_type: str, **details: object) -> None:
+def log_event(event_type: str, log_dir: Path, **details: object) -> None:
     global _event_log_initialized
 
     now = datetime.now()
@@ -146,7 +147,7 @@ def log_event(event_type: str, **details: object) -> None:
     }
 
     mode = "w" if not _event_log_initialized else "a"
-    with open("game_events.jsonl", mode) as f:
+    with open(log_dir / "game_events.jsonl", mode) as f:
         f.write(json.dumps(event) + "\n")
 
     _event_log_initialized = True

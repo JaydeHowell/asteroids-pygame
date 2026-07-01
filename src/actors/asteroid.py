@@ -2,6 +2,7 @@ import pygame
 
 import random
 import math
+from pathlib import Path
 
 from core.circleshape import CircleShape
 from core.wave import Wave
@@ -53,12 +54,12 @@ class Asteroid(CircleShape):
 
 
     # defines asteroid split logic and returns score for destroying an asteroid (L = 10, M = 15, S = 20)
-    def split(self) -> int:
+    def split(self, log_dir: Path) -> int:
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
             return 20
 
-        log_event("asteroid_split")
+        log_event("asteroid_split", log_dir)
         random_angle = random.uniform(20, 50)
         first_rotated = self.velocity.rotate(random_angle)
         second_rotated = self.velocity.rotate(-random_angle)

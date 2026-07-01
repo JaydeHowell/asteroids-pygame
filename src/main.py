@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from core.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from system.paths import get_project_root
 from system.logger import log_state, log_event
 from actors.player import Player
 from actors.asteroid import Asteroid
@@ -16,12 +17,18 @@ def main():
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
+    root_dir = get_project_root()
+    log_dir = root_dir / "data"
+    assets_dir = root_dir / "assets"
+
+    log_dir.mkdir(parents=True, exist_ok=True)
+
     pygame.init()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Asteroids - Jayde")
 
-    bg_unscaled = pygame.image.load("../assets/background.png").convert()
+    bg_unscaled = pygame.image.load(assets_dir / "background.png").convert()
 
     background = pygame.transform.scale(bg_unscaled, (SCREEN_WIDTH, SCREEN_HEIGHT))
     
@@ -54,7 +61,7 @@ def main():
     field = AsteroidField()
 
     while True:
-        log_state()
+        log_state(log_dir)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,22 +72,23 @@ def main():
 
         for asteroid in asteroids:
             if asteroid.collides_with(player):
-                log_event("player_hit")
+                log_event("player_hit", log_dir)
+                log_event(f"final_score {score_value}", log_dir)
                 print("Game over!")
                 print(f"Final Score: {score_value}")
                 sys.exit(1)
             for shot in shots:
                 if asteroid.collides_with(shot):
-                    log_event("asteroid_shot")
-                    score_value += asteroid.split()
+                    log_event("asteroid_shot", log_dir)
+                    score_value += asteroid.split(log_dir)
                     shot.kill()
             for bomb in bombs:
                 if asteroid.collides_with(bomb):
                     bomb.explode()
             for blast in blasts:
                 if asteroid.collides_with(blast):
-                    log_event("explosion_hit_asteroid")
-                    asteroid.split()
+                    log_event("explosion_hit_asteroid", log_dir)
+                    asteroid.split(log_dir)
 
         score_text = score_font.render(f"Score: {score_value}", True, "White")
 
