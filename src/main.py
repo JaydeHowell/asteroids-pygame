@@ -88,7 +88,7 @@ def main():
             for blast in blasts:
                 if asteroid.collides_with(blast):
                     log_event("explosion_hit_asteroid", log_dir)
-                    asteroid.split(log_dir)
+                    score_value += asteroid.split(log_dir)
 
         score_text = score_font.render(f"Score: {score_value}", True, "White")
 
