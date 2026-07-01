@@ -3,9 +3,9 @@ import pygame
 import random
 import math
 
-from circleshape import CircleShape
-from wave import Wave
-from constants import (
+from core.circleshape import CircleShape
+from core.wave import Wave
+from core.constants import (
         LINE_WIDTH,
         ASTEROID_MIN_RADIUS,
         ASTEROID_MAX_RADIUS,
@@ -13,7 +13,7 @@ from constants import (
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
         )
-from logger import log_event
+from system.logger import log_event
 
 
 class Asteroid(CircleShape):

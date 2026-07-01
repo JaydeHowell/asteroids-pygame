@@ -1,7 +1,7 @@
 import pygame
-from circleshape import CircleShape
-from blast import Blast
-from constants import SHOT_RADIUS, BOMB_DELAY, BOMB_BLAST_RADIUS
+from core.circleshape import CircleShape
+from core.constants import SHOT_RADIUS, BOMB_DELAY, BOMB_BLAST_RADIUS
+from actors.blast import Blast
 
 class Bomb(CircleShape):
     def __init__(self, x: float, y: float):

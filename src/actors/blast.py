@@ -1,9 +1,10 @@
 import pygame
 import math
 import random
-from circleshape import CircleShape
-from wave import Wave
-from constants import BLAST_VERTICES
+
+from core.circleshape import CircleShape
+from core.wave import Wave
+from core.constants import BLAST_VERTICES
 
 class Blast(CircleShape):
     def __init__(self, x: float, y: float, max_radius: float):

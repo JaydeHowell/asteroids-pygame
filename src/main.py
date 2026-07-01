@@ -1,14 +1,14 @@
 import pygame
 import sys
 
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from logger import log_state, log_event
-from player import Player
-from asteroid import Asteroid
-from asteroidfield import AsteroidField
-from shot import Shot
-from bomb import Bomb
-from blast import Blast
+from core.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from system.logger import log_state, log_event
+from actors.player import Player
+from actors.asteroid import Asteroid
+from actors.asteroidfield import AsteroidField
+from actors.shot import Shot
+from actors.bomb import Bomb
+from actors.blast import Blast
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Asteroids - Jayde")
 
-    bg_unscaled = pygame.image.load("images/background.png").convert()
+    bg_unscaled = pygame.image.load("../assets/background.png").convert()
 
     background = pygame.transform.scale(bg_unscaled, (SCREEN_WIDTH, SCREEN_HEIGHT))
     
